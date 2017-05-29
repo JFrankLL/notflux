@@ -1,4 +1,4 @@
-angular.module('userControllers', ['streamServices'])
+angular.module('streamControllers', ['streamServices'])
 
 .controller('streamCtrl', function(Stream) {
     var app = this;

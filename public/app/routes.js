@@ -49,7 +49,7 @@ var app = angular.module('appRoutes', ['ngRoute'])
         templateUrl: 'app/views/pages/stream/play.html',
         controller: 'streamCtrl',
         controllerAs: 'stream',
-        authenticated: true
+        //authenticated: true
     })
     // CUALQUIERA REDIRECCIONA A HOME
     .otherwise({ redirectTo: '/'} );

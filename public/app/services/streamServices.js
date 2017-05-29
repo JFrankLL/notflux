@@ -6,7 +6,7 @@ angular.module('streamServices', [])
     // Stream.stream(fileName);
     streamFactory.stream = function(fileName){
         console.log('From service: ' + fileName);
-        return $http.get('/api/stream');
+        return $http.get('/api/stream/'+fileName);
     };
 
     return streamFactory;

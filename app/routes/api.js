@@ -68,36 +68,17 @@ module.exports = function(router) {
             }
         });
     });
-    // MIDDLEWARE
-    router.use(function (req, res, next){
-        var token = req.body.token || req.body.query || req.headers['x-access-token'];
-        if(token) {
-            // verify token
-            jwt.verify(token, secret, function(err, decoded){
-                if(err) {
-                    res.json({ success: false, message: 'Token invalid' });
-                } else {
-                    req.decoded = decoded;
-                    next();
-                }
-            });
-        } else {
-            res.json({ success: false, message: 'No token provided'});
-        }
-    });
-    // GET USER INFO
-    // http://localhost:8080/api/me
-    router.post('/me', function(req, res) {
-        res.send(req.decoded);
-    });
     // STREAM A VIDEO
     // http://localhost:8080/api/stream
-    router.get('/stream', function(req, res) {
-        //var path = 'C:/Users/fv5_l/Videos/Series/Better Call Saul/Better.Call.Saul.S03E02.mp4';
+    router.get('/stream/:fn?', function(req, res) {
+        var path = 'C:/Users/fv5_l/Videos/Series/Better Call Saul/Better.Call.Saul.S03E02.mp4';
         
-        //console.log('From app: '+ req.params.fn);
+        // req.params.fn SEARCH IN MONGO FOR THAT ROUTE
 
-        /*var stat = fs.statSync(path);
+        console.log('From app: '+ req.params.fn);
+
+        //
+        var stat = fs.statSync(path);
         var total = stat.size;
         if (req.headers['range']) {
             var range = req.headers.range;
@@ -131,6 +112,31 @@ module.exports = function(router) {
         console.log('stremear');//*/
     });
 
+    // MIDDLEWARE
+    router.use(function (req, res, next){
+        var token = req.body.token || req.body.query || req.headers['x-access-token'];
+        if(token) {
+            // verify token
+            jwt.verify(token, secret, function(err, decoded){
+                if(err) {
+                    res.json({ success: false, message: 'Token invalid' });
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+        } else {
+            res.json({ success: false, message: 'No token provided'});
+            //next();
+        }
+    });//*/
+    // GET USER INFO
+    // http://localhost:8080/api/me
+    router.post('/me', function(req, res) {
+        res.send(req.decoded);
+    });
+    
+    
 
     return router;
 };
