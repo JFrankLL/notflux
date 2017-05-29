@@ -1,7 +1,9 @@
 var User        = require('../models/user.js');
+var Video       = require('../models/video.js');
 var jwt         = require('jsonwebtoken');
 var secret      = 'harrypotter';
 var fs          = require('fs');
+var path        = require('path');
 
 module.exports = function(router) {
     // http://localhost:8080/api/users
@@ -69,47 +71,62 @@ module.exports = function(router) {
         });
     });
     // STREAM A VIDEO
-    // http://localhost:8080/api/stream
-    router.get('/stream/:fn?', function(req, res) {
-        var path = 'C:/Users/fv5_l/Videos/Series/Better Call Saul/Better.Call.Saul.S03E02.mp4';
-        
-        // req.params.fn SEARCH IN MONGO FOR THAT ROUTE
-
-        console.log('From app: '+ req.params.fn);
-
+    // http://localhost:8080/api/stream?search=
+    router.get('/stream/:search?', function(req, res) {
         //
-        var stat = fs.statSync(path);
-        var total = stat.size;
-        if (req.headers['range']) {
-            var range = req.headers.range;
-            var parts = range.replace(/bytes=/, "").split("-");
-            var partialstart = parts[0];
-            var partialend = parts[1];
-
-            var start = parseInt(partialstart, 10);
-            var end = partialend ? parseInt(partialend, 10) : total-1;
-            var chunksize = (end-start)+1;
-            //console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
-            var porc = 100*start/end;
-            console.log('Progress: ' + porc.toFixed(2) + '%');
-
-            var file = fs.createReadStream(path, {start: start, end: end});
-            res.writeHead(206, { 
-                'Content-Range': 'bytes ' + start + '-' + end + '/' + total, 
-                'Accept-Ranges': 'bytes', 
-                'Content-Length': chunksize, 
-                'Content-Type': 'video/mp4' 
-            });
-            file.pipe(res);
+        var value;
+        if(!req.query.search) {
+            return res.json({ success: false, message: 'Search value not given.' });
         } else {
-            console.log('ALL: ' + total/1000/1000 + ' MB');
-            res.writeHead(200, { 
-                'Content-Length': total,
-                'Content-Type': 'video/mp4'
-            });
-            fs.createReadStream(path).pipe(res);
+            value = req.query.search;
         }
-        console.log('stremear');//*/
+
+        // FIXME: value SEARCH IN MONGO FOR THAT VIDEO
+        console.log('buscando: '+value);
+        Video.findOne({ name: {'$regex': ''+value+''} }).select('path').exec(function (err, video) {
+            if(err){ 
+                return res.json({ success: false, message: err });
+            } else {
+                if(video) {
+                    path = video.path;
+                    console.log(path);
+                    if(typeof path != "undefined")
+                        return streamear(req, res, path);
+                    else
+                        return res.json({ success: false, message: err });
+                }else
+                    return res.json({ success: false, message: err });
+            }
+        });
+        
+    });
+
+    // GET VIDEO LIST
+    // http:localhost:8080/api/getList?search=
+    router.get('/getList/:search?', function(req, res) {
+        var value;
+        if(!req.query.search)
+            return res.json({ success: false, message: 'Search value not given.' });
+        else
+            value = req.query.search;
+        
+        // SEARCH IN MONGO FOR THAT NAME KEY VALUE
+        var path = "";
+        console.log('buscandoLista con: '+value);
+        Video.find({ name: {'$regex': ''+value+''} }).select('name _id').exec(function (err, docs) {
+            if(err){ 
+                return res.json({ success: false, message: err });
+            } else {
+                if(docs) {
+                    //TODO: IMPLEMENT SOME SORT OF [video ID] AND SEND IT TO THE FRONT-END, SO IT CAN 
+                    // RESEND IT TO THE BACK-END AND GET A STREAM REQUEST OF IT.
+                    //console.log(docs);
+                    return res.json(docs);
+                }else
+                    return res.json({ success: false, message: err });
+            }
+        });
+        
     });
 
     // MIDDLEWARE
@@ -137,6 +154,46 @@ module.exports = function(router) {
     });
     
     
+    
 
     return router;
 };
+ 
+////////////////////////////////////////////////////////////////////////////////////////
+var streamear = function(req, res, path) {
+    var stat = fs.statSync(path);
+    var total = stat.size;
+    if (req.headers.range) {
+        var range = req.headers.range;
+        var parts = range.replace(/bytes=/, "").split("-");
+        var partialstart = parts[0];
+        var partialend = parts[1];
+
+        var start = parseInt(partialstart, 10);
+        var end = partialend ? parseInt(partialend, 10) : total-1;
+        var chunksize = (end-start)+1;
+        //console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
+        var porc = 100*start/end;
+        console.log('Progress: ' + porc.toFixed(2) + '%');
+
+        var file = fs.createReadStream(path, {start: start, end: end});
+        res.writeHead(206, { 
+            'Content-Range': 'bytes ' + start + '-' + end + '/' + total, 
+            'Accept-Ranges': 'bytes', 
+            'Content-Length': chunksize, 
+            'Content-Type': 'video/mp4',
+            'codecs': 'theora, vorbis'
+        });
+        file.pipe(res);
+    } else {
+        console.log('ALL: ' + total/1000/1000 + ' MB');
+        res.writeHead(200, { 
+            'Content-Length': total,
+            'Content-Type': 'video/mp4',
+            'codecs': 'theora, vorbis'
+        });
+        fs.createReadStream(path).pipe(res);
+    }
+};
+
+//type='video/x-matroska' codecs='theora, vorbis'

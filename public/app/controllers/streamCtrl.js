@@ -3,22 +3,21 @@ angular.module('streamControllers', ['streamServices'])
 .controller('streamCtrl', function(Stream) {
     var app = this;
 
+    // GET STREAMING VIDEO BY ROUTE-NAME
     this.stream = function(vidData) {
+        //console.log("ctrl app val: " + vidData.vidName);
+        //
+        Stream.stream(vidData.vidName).then(function(video) {
+            console.log("parte del video: " + video);
+        });//*/
 
-        var reqStream = false;
+    };
 
-        if(vidData.vidname == 'saul') {
-            app.fileName = 'C:/Users/fv5_l/Videos/Series/Better Call Saul/Better.Call.Saul.S03E02.mp4';
-            reqStream = true;
-            console.log('video solicitado: ' + vidData.vidname);
-        }
-
-        if(reqStream) {
-            Stream.stream(app.fileName).then(function(video) {
-                console.log("parte del video: " + video);
-            });
-        } else {
-            console.log('Stream clound not start');
-        }
+    // SEARCH A LIST OF AVAILABLE VIDEOS
+    // TODO: mongo query verify video actually exists
+    this.searchFor = function(searchData) {
+        Stream.find(searchData.vidName).then(function(videosList) {
+            console.log(videosList);
+        });
     };
 });

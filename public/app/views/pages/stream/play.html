@@ -13,8 +13,14 @@
 	    </video-->
 
 
-        <div>
-            <button ng-click="stream.stream({ vidname: 'saul' });">play</button>
-        </div>
+        <form name="searchForm" ng-submit="stream.searchFor({ vidName: searchForm.searchValue.$viewValue });">
+
+            <label>Buscar:</label>
+            <input class="form-control" type="text" name="searchValue" placeholder="search" ng-model="searchValue" required>    
+            <br>
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        
+        </form>
+
     </body>
 </html>
