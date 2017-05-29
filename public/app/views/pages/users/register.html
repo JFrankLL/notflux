@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<div class="page-header">
+    <h1>User Registration</h1>
+</div>
+
+<form name="regForm" ng-submit="register.regUser(regData, regForm.$valid);" novalidate>
+    <!---->
+    <div ng-class="{ 'has-success':(regForm.name.$valid && !regForm.name.$pristine), 'has-error': (!regForm.name.$valid && !regForm.name.$pristine) || (!regForm.name.$valid && regForm.$submitted)}">
+        <label>Name:</label>
+        <input class="form-control" type="text" name="name" placeholder="please enter name" ng-model="register.regData.name" required ng-pattern="/^[a-zA-Z]+$/">
+        <p class="help-block" ng-show="(!regForm.name.$pristine && regForm.name.$error.required) || (regForm.$submitted && regForm.name.$error.required)">This field is required</p>    
+        <ul class="help-block" ng-show="(!regForm.name.$pristine && regForm.name.$error.pattern)"> 
+            <li>Must not contain special characters and no numbers</li>
+        </ul>
+    </div>
+    <br>
+    <!---->
+    <div ng-class="{ 'has-success':(regForm.email.$valid && !regForm.email.$pristine), 'has-error': (!regForm.email.$valid && !regForm.email.$pristine) || (!regForm.email.$valid && regForm.$submitted)}">
+        <label>Email:</label>
+        <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="register.regData.email" required ng-pattern="/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/">
+        <p class="help-block" ng-show="(!regForm.email.$pristine && regForm.email.$error.required) || (regForm.$submitted && regForm.email.$error.required)">This field is required</p>    
+        <ul class="help-block" ng-show="(!regForm.email.$pristine && regForm.email.$error.pattern)"> 
+            <li>Must contain "@"</li>
+            <li>Must not contain special characters</li>
+        </ul>
+    </div>    
+    <br>
+    <!---->
+    <div ng-class="{ 'has-success':(regForm.username.$valid && !regForm.username.$pristine), 'has-error': (!regForm.username.$valid && !regForm.username.$pristine) || (!regForm.username.$valid && regForm.$submitted)}">
+        <label>Username:</label>
+        <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="register.regData.username" required ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z]|=.*?[A-Z]).{3,16}$/">
+        <p class="help-block" ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)">This field is required</p>    
+        <ul class="help-block" ng-show="(!regForm.username.$pristine && regForm.username.$error.pattern)"> 
+            <li>Must contain "@"</li>
+            <li>Must not contain special characters and no numbers</li>
+            <li>Must be at least 3 characters long but no more than 16</li>
+        </ul>
+    </div>
+    <br>
+    <!---->
+    <div ng-class="{ 'has-success':(regForm.password.$valid && !regForm.password.$pristine), 'has-error': (!regForm.password.$valid && !regForm.password.$pristine) || (!regForm.password.$valid && regForm.$submitted)}">
+        <label>Password:</label>
+        <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password" required ng-minlength="6">
+        <p class="help-block" ng-show="(!regForm.password.$pristine && regForm.password.$error.required) || (regForm.$submitted && regForm.password.$error.required)">This field is required</p>    
+        <ul class="help-block" ng-show="(!regForm.password.$pristine && regForm.password.$error.pattern)">
+            <li>Must be at least 6</li>
+        </ul>
+    </div>
+    <br>
+    <button class="btn btn-primary" type="submit">Register</button>
+</form>
+
+<!--span><strong>Is this form pristine (new): </strong>{{ regForm.$pristine }}</span><br>
+<span><strong>Does this form have errors: </strong>{{ regForm.$error }}</span><br>
+<span><strong>Was the form submited: </strong>{{ regForm.$submitted }}</span><br>
+<span><strong>Is this form valid: </strong>{{ regForm.$valid }}</span><br-->
+
+<hr>
+<div class="jumbotron text-center" ng-show="register.loading">
+    <span class="glyphicon glyphicon-repeat spinner"></span>
+    <p>Loading....</p>
+</div>
+<!---->
+<div class="raw show-hide-message" ng-show="register.successMsg">
+    <div class="alert alert-success">{{ register.successMsg }}</div>
+</div>
+<!---->
+<div class="raw show-hide-message" ng-show="register.errorMsg">
+    <div class="alert alert-danger">{{ register.errorMsg }}</div>
+</div>
