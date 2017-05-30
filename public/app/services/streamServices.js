@@ -11,7 +11,7 @@ angular.module('streamServices', [])
     
     // Stream.find(vidName);
     streamFactory.find = function(vidName){
-        return $http.get('/api/stream?search=' + vidName);
+        return $http.get('/api/getList?search=' + vidName);
     };
 
     return streamFactory;

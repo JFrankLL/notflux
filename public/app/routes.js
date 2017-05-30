@@ -45,11 +45,17 @@ var app = angular.module('appRoutes', ['ngRoute'])
         controllerAs: 'facebook'
     })
     // STREAM
-    .when('/stream', {
+    .when('/search', {
+        templateUrl: 'app/views/pages/stream/search.html',
+        controller: 'streamCtrl',
+        controllerAs: 'stream',
+        authenticated: true
+    })
+    .when('/play/:id', {
         templateUrl: 'app/views/pages/stream/play.html',
         controller: 'streamCtrl',
         controllerAs: 'stream',
-        //authenticated: true
+        authenticated: true
     })
     // CUALQUIERA REDIRECCIONA A HOME
     .otherwise({ redirectTo: '/'} );

@@ -1,26 +1,24 @@
-<!DOCTYPE HTML5>
+<!DOCTYPE html>
 <html>
     <head>
-        <title>Video</title>
+        <title>Reproductor</title>
     </head>
     <body>
         <div class="page-header">
-            <h1>Get Streaming Video</h1>
+            <h1>Reproductor</h1>
         </div>
 
-        <!--video width="500" controls>
-	        <source src="http://localhost:8080/api/stream?fn=saul" type="video/mp4"/>
-	    </video-->
-
-
-        <form name="searchForm" ng-submit="stream.searchFor({ vidName: searchForm.searchValue.$viewValue });">
-
-            <label>Buscar:</label>
-            <input class="form-control" type="text" name="searchValue" placeholder="search" ng-model="searchValue" required>    
-            <br>
-            <button class="btn btn-primary" type="submit">Buscar</button>
-        
-        </form>
+        <br>
+        <div align="center" class="embed-responsive embed-responsive-16by9">
+            <video autoplay class="embed-responsive-item" controls>
+                <!-- TODO: change search value for last qery value
+                src="http://192.168.0.11:8080/api/stream?search=592c7abaacada9482777a433"
+                -->
+                <source ng-src="{{ stream.getParam(); }}" id="player" type="video/mp4">
+            </video>
+        </div>
 
     </body>
 </html>
+
+

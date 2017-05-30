@@ -49,32 +49,32 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Bootstrap theme</a>
+          <a class="navbar-brand" href="#">NotFlux</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
 
-            <li class="active"><a href="/">Home</a></li>
+            <li class="active"><a href="/"> Home </a></li>
+            <li><a href="/about"> About </a></li>
+            
             <li><a ng-show="main.isLoggedIn" href="/profile"> Hello {{ main.username }} </a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/stream">Stream</a></li>
+            <li><a ng-show="main.isLoggedIn" href="/search"> Search </a></li>
 
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <li ng-show="main.isLoggedIn" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Session <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <li><a href="#"> Opcion 1 </a></li>
+                <li><a href="#"> Opcion 2 </a></li>
+                <li><a href="#"> Opcion 3 </a></li>
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
+                <li class="dropdown-header"> Mas opciones </li>
+                <li><a href="#"> Opcion 4 </a></li>
+                <li><a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
               </ul>
             </li>
 
-            <li><a ng-show="!main.isLoggedIn" href="/register"><span class="glyphicon glyphicon-hand-up"></span> Register</a></li>
-            <li><a ng-show="!main.isLoggedIn" href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            <li><a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            <li><a ng-show="!main.isLoggedIn" href="/register"><span class="glyphicon glyphicon-hand-up"></span> Register </a></li>
+            <li><a ng-show="!main.isLoggedIn" href="/login"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
 
           </ul>
         </div><!--/.nav-collapse -->

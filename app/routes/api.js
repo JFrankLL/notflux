@@ -4,6 +4,7 @@ var jwt         = require('jsonwebtoken');
 var secret      = 'harrypotter';
 var fs          = require('fs');
 var path        = require('path');
+var ObjectId    = require('mongoose').Types.ObjectId; 
 
 module.exports = function(router) {
     // http://localhost:8080/api/users
@@ -83,7 +84,7 @@ module.exports = function(router) {
 
         // FIXME: value SEARCH IN MONGO FOR THAT VIDEO
         console.log('buscando: '+value);
-        Video.findOne({ name: {'$regex': ''+value+''} }).select('path').exec(function (err, video) {
+        Video.findOne({ _id: ObjectId(value) }).select('path').exec(function (err, video) {
             if(err){ 
                 return res.json({ success: false, message: err });
             } else {
@@ -113,18 +114,17 @@ module.exports = function(router) {
         // SEARCH IN MONGO FOR THAT NAME KEY VALUE
         var path = "";
         console.log('buscandoLista con: '+value);
-        Video.find({ name: {'$regex': ''+value+''} }).select('name _id').exec(function (err, docs) {
+        Video.find({ name: {'$regex': ''+value+''} }).select('_id name').exec(function (err, docs) {
             if(err){ 
                 return res.json({ success: false, message: err });
-            } else {
-                if(docs) {
-                    //TODO: IMPLEMENT SOME SORT OF [video ID] AND SEND IT TO THE FRONT-END, SO IT CAN 
-                    // RESEND IT TO THE BACK-END AND GET A STREAM REQUEST OF IT.
-                    //console.log(docs);
-                    return res.json(docs);
-                }else
-                    return res.json({ success: false, message: err });
             }
+            if(docs) {
+                //TODO: IMPLEMENT SOME SORT OF [video ID] AND SEND IT TO THE FRONT-END, SO IT CAN 
+                // RESEND IT TO THE BACK-END AND GET A STREAM REQUEST OF IT.
+                //console.log(docs);
+                return res.json(docs);
+            }else
+                return res.json({ success: false, message: err });
         });
         
     });
