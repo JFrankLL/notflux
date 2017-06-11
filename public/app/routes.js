@@ -29,6 +29,8 @@ var app = angular.module('appRoutes', ['ngRoute'])
     // PROFILE
     .when('/profile', {
         templateUrl: 'app/views/pages/users/profile.html',
+        controller: 'profileCtrl',
+        controllerAs: 'profile',
         authenticated: true
     })
     // FACEBOOK
@@ -56,6 +58,11 @@ var app = angular.module('appRoutes', ['ngRoute'])
         controller: 'streamCtrl',
         controllerAs: 'stream',
         authenticated: true
+    })
+    .when('/multimedia/:serie?', {
+        templateUrl: 'app/views/pages/stream/multimedia.html',
+        controller: 'streamCtrl',
+        controllerAs: 'stream'
     })
     // CUALQUIERA REDIRECCIONA A HOME
     .otherwise({ redirectTo: '/'} );

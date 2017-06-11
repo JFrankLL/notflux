@@ -1,6 +1,6 @@
 angular.module('userApp', [ 'appRoutes', 'userControllers', 'userServices',
                             'ngAnimate', 'mainController', 'authServices',
-                            'streamControllers'
+                            'streamControllers', 'profileController'
                         ])
 
 .config(function($httpProvider) {

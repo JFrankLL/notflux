@@ -27,11 +27,13 @@
     <script src="app/controllers/userCtrl.js"></script>
     <script src="app/controllers/mainCtrl.js"></script>
     <script src="app/controllers/streamCtrl.js"></script>
+    <script src="app/controllers/profileCtrl.js"></script>
 
     <!-- Angular Services -->
     <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
     <script src="app/services/streamServices.js"></script>
+    <script src="app/services/profileServices.js"></script>
 
     <title>notFlux</title>
 
@@ -49,19 +51,19 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">NotFlux</a>
+          <a href="/" style="color: crimson;" class="navbar-brand">NotFlux</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
 
-            <li class="active"><a href="/"> Home </a></li>
-            <li><a href="/about"> About </a></li>
+            <li class="active"><a href="/"> Inicio </a></li>
+            <li><a href="/about"> Acerca de.. </a></li>
             
-            <li><a ng-show="main.isLoggedIn" href="/profile"> Hello {{ main.username }} </a></li>
-            <li><a ng-show="main.isLoggedIn" href="/search"> Search </a></li>
+            <li><a ng-show="main.isLoggedIn" href="/profile"> Perfil de {{ main.username }} </a></li>
+            <li><a ng-show="main.isLoggedIn" href="/search"> Busqueda </a></li>
 
             <li ng-show="main.isLoggedIn" class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Session <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Menu <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#"> Opcion 1 </a></li>
                 <li><a href="#"> Opcion 2 </a></li>
@@ -83,13 +85,7 @@
 
     <div class="container theme-showcase" role="main">
 
-      <!-- Main jumbotron for a primary marketing message or call to action >
-      <div class="jumbotron">
-        <h1>Theme example</h1>
-        <p>This is a template showcasing the optional theme stylesheet
-          included in Bootstrap. Use it as a starting point to create
-          something more unique by building on or modifying it.</p>
-      </div-->
+      
 
     <br>
     <div ng-view></div>

@@ -1,4 +1,175 @@
 <!DOCTYPE html>
-<div class="page-header">
-    <h1>Hello {{ main.username }} from home route.</h1>
-</div>
+<html>
+    <head>
+        <title>Home</title>
+        <script>
+            (function($) {
+                $.fn.parallax = function(options) {
+                    var windowHeight = $(window).height();
+                    // Establish default settings
+                    var settings = $.extend({speed        : 0.15}, options);
+                    // Iterate over each object in collection
+                    return this.each( function() {
+                        // Save a reference to the element
+                        var $this = $(this);
+                        // Set up Scroll Handler
+                        $(document).scroll(function(){
+                            var scrollTop = $(window).scrollTop();
+                            var offset = $this.offset().top;
+                            var height = $this.outerHeight();
+                        // Check if above or below viewport
+                            if (offset + height <= scrollTop || offset >= scrollTop + windowHeight) {
+                                return;
+                            }
+                            var yBgPosition = Math.round((offset - scrollTop) * settings.speed);
+                            // Apply the Y Background Position to Set the Parallax Effect
+                            $this.css('background-position', 'center ' + yBgPosition + 'px');
+                        });
+                    });
+                }
+            }(jQuery));
+            $('.bg-1,.bg-3').parallax({speed :	0.15});
+            $('.bg-2').parallax({speed :	0.25});
+        </script>
+    </head>
+    
+    <body>
+        <br>
+        <br>
+        <br>
+        <!-- Main jumbotron for a primary marketing message or call to action>
+        <div class="bg">
+            <div class="jjumbotron">
+                <div style="padding: 3cm 0cm 0cm 3cm;">
+                    <h1> Notflux</h1>
+                    <p class="lead">Tu plataforma proveedora de servicios streaming de multimedia del momento.</p>
+                </div>
+            </div>
+        </div-->
+
+        <!--parallax 1 -->
+        <section class="bg-1 text-center">
+        <h1 class="insetType">Tus Peliculas y Series favoritas.</h1>
+        <p class="insetType sub" >Facil y Rapido</p>
+        </section>
+        <!--/parallax 1-->
+        <div class="container">
+            <br><br><br>
+            <div class="row">
+                <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Hello.</h3></div>
+                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+                    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+                    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+                    Aliquam in felis sit amet augue.
+                    </div>
+                    <div class="panel-footer text-right"><a href="#" class="btn btn-default">More</a></div>
+                </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Hello.</h3></div>
+                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+                    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+                    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+                    Aliquam in felis sit amet augue.
+                    </div>
+                    <div class="panel-footer text-right"><a href="#" class="btn btn-default">More</a></div>
+                </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Hello.</h3></div>
+                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+                    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+                    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+                    Aliquam in felis sit amet augue.
+                    </div>
+                    <div class="panel-footer text-right"><a href="#" class="btn btn-default">More</a></div>
+                </div>
+                </div>
+            </div><!--/row-->
+        
+        </div><!--/container-->
+        <div class="divider"></div>
+        <section class="bg-2">
+        <div class="col-sm-10 col-sm-offset-1 text-center">
+        
+            <h1 class="insetType saul">Better Call Saul</h1>
+            <p class="insetType sub" >
+                Ambientada en 2002, seis años antes de los acontecimientos relatadas en Breaking Bad,
+                Better Call Saul es un spin-off centrado en el personaje de James 'Jimmy' McGuill (Bob
+                Odenkirk), antes de que asuma la identidad de Saul Goodman, un abogado corrupto con un
+                humor políticamente incorrecto.
+            </p>
+            
+        </div>
+        </section>
+        <div class="divider"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Hello.</h3></div>
+                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+                    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+                    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+                    Aliquam in felis sit amet augue.
+                    </div>
+                    <div class="panel-footer text-right"><a href="#" class="btn btn-default">More</a></div>
+                </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Hello.</h3></div>
+                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+                    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+                    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+                    Aliquam in felis sit amet augue.
+                    </div>
+                    <div class="panel-footer text-right"><a href="#" class="btn btn-default">More</a></div>
+                </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Hello.</h3></div>
+                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+                    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+                    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+                    Aliquam in felis sit amet augue.
+                    </div>
+                    <div class="panel-footer text-right"><a href="#" class="btn btn-default">More</a></div>
+                </div>
+                </div>
+            </div>  
+        </div><!--/container-->
+        <div class="divider"></div>
+        <!--parallax 2 -->
+        <section class="bg-3 text-center">
+
+            <div class="col-sm-10 col-sm-offset-1 text-center">
+                <h1 class="insetType val">Silicon Valley</h1>
+                <p class="insetType sub" >
+                   Richard Hendricks (Thomas Middleditch) es un programador solitario tímido que trabaja
+                   en una gran empresa de Internet llamada Hooli, mientras desarrolla una aplicación de 
+                   música llamada Pied Piper en una compañía startup incubadora de empresas dirigida 
+                   por el empresario Erlich Bachman (T.J. Miller).
+                </p>
+            </div>
+
+        <p class="lead"></p>
+        </section>
+        
+
+        <!--/parallax 2-->
+        <div style="padding-bottom: 5cm"  id="footer">
+        <div class="container">
+            <p class="text-muted">Proyecto final, 2017. Mas informacion en: <a href="/about">Notflux.com</a></p>
+        </div>
+        </div>
+        
+
+
+    </body>
+</html>

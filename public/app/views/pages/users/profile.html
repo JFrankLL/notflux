@@ -5,19 +5,91 @@
 
 <div class="panel panel-info">
     <!-- Default panel contents -->
-    <div class="panel-heading" style="text-align: center;"><strong>User Profile</strong></div>
+    <div class="panel-heading" style="text-align: center;"><strong>Perfil</strong></div>
     
     <!-- Table -->
     <table class="table">
         <tr>
             <td><strong>Username</strong></td>
-            <td><strong>Email</strong></td>
+            <td><strong>E-mail</strong></td>
             <td><strong>Password</strong></td>
+            <td><strong>Tipo</strong></td>
         </tr>
         <tr>
             <td>{{ main.username }}</td>
             <td>{{ main.useremail }}</td>
             <td>********************</td>
+            <td>{{ main.tipo }}</td>
         </tr>
     </table>
+
+</div>
+
+<div ng-show="main.root">
+    <div class="jumbotron mod">
+        <h2>Acciones de Administrador</h2>
+
+        <!-- Buscar y bloquear videos -->
+        <div class="jumbotron mod2">
+            <label>Bloquear video (no borra)</label>
+            <br>
+            <form name="searchForma" ng-submit="profile.buscar( searchValue );">
+                <input style="background-color:#080808;color: white;" class="form-control"
+                type="text" name="searchValue" placeholder="buscar" ng-model="searchValue"
+                autocomplete="off" required>    
+                <br>
+                <button class="btn panel-body c" type="submit">Buscar</button>
+            </form>
+            <br><br>
+            <!-- Resultados -->
+            <table width="100%">
+                <th> <h1  style="color:white;">{{ profile.lista.title }}</h1> </th>
+                <tr item-width="100%">
+                    <td style="padding: 0px;" item-width="100%">
+                        <table width="100%" class="table-borderless">
+                            <th style="text-align: center;" width="80%">Episodio</th>
+                            <th align="center" width="20%">Bloqueo</th>
+                            <!-- EPISODE i -->
+                            <tr ng-repeat="video in profile.lista.videos">
+                                <td style="padding: 0px;" align="center">
+                                    <div class="panel panel-body c c" ng-click="profile.bloquear( video._id )">
+                                        {{ video.name }}
+                                    </div>
+                                </td>
+                                <td style="padding: 0px;" align="center" valign="center">
+                                    <!--form method="post" action="/action_page_post.php"-->
+                                    <form name="blockForma">
+                                        <label class="switch">
+                                            <input class="form-control" type="checkbox"
+                                            ng-model="video.block" ng-click="profile.bloquear( video._id )">
+                                            <div class="slider round"></div>
+                                        </label>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>

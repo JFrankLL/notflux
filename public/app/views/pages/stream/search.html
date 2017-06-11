@@ -1,31 +1,59 @@
 <!DOCTYPE HTML5>
-<html>
-    <head>
-        <title>Video</title>
-    </head>
-    <body>
-        <div class="page-header">
-            <h1>Get Streaming Video</h1>
-        </div>
 
-        <!--video width="500" controls>
-	        <source src="http://localhost:8080/api/stream?fn=saul" type="video/mp4"/>
-	    </video-->
+<!-- Titulo -->
+<div class="page-header">
+    <h1 style="color: white;"> Busqueda Multimedia </h1>
+</div>
 
+<!-- Busqueda -->
+<form name="searchForm" ng-submit="stream.searchFor({ vidName: searchForm.searchValue.$viewValue });">
+    <input style="background-color:#2C0808;color: white;" class="form-control" type="text" name="searchValue" placeholder="buscar" ng-model="searchValue" autocomplete="off" required>    
+    <br>
+    <button class="btn panel-body c" type="submit">Buscar</button>
+</form>
 
-        <form name="searchForm" ng-submit="stream.searchFor({ vidName: searchForm.searchValue.$viewValue });">
-            <label>Buscar:</label>
-            <input class="form-control" type="text" name="searchValue" placeholder="search" ng-model="searchValue" required>    
-            <br>
-            <button class="btn btn-primary" type="submit">Buscar</button>
-        </form>
-
-        <br>
-        <hr>
-        <div class="list-group" ng-show="stream.isLista">
-            <strong>Videos disponibles</strong>
-            <a target="_blank" href="/play/{{ val._id }}" class="list-group-item" ng-repeat="val in stream.lista">{{ val.name }}</a>
-        </div>
-
-    </body>
-</html>
+<br>
+<br>
+<!-- Lista -->
+<div class="list-group" ng-show="stream.isMultimedia">
+    <strong>Videos disponibles</strong>
+    <table ng-repeat="val in stream.Multimedia" class="table table-borderless">
+        <td width="40%">
+            <table>
+                <!-- COVER ART COLUMN -->
+                <tr>
+                    <td align="center" width="40%">
+                        <a href="/multimedia?search={{ val.title }}">
+                            <img src="/api/getImg?img_name={{ val.cover }}" class="img-responsive" />
+                        </a>
+                    </td>
+                </tr>
+                <!-- Description -->
+                <tr>
+                    <td class="insetType" style="color: whitesmoke">
+                        <h2>Busquedas</h2>
+                        <h1 style="color: darkolivegreen">{{ val.busquedas }}</h1>
+                        <h2>Calificacion</h2>
+                        <h1 style="color: goldenrod;"> &#9733 &#9733 &#9733 &#9733 &#9733</h1>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <!-- EPISODES LIST COLUMN -->
+        <td>
+            <table width="100%" class="table-borderless">
+                <!-- EPISODE i -->
+                <tr ng-repeat="vol in val.videos">
+                    <td style="padding: 0px;" align="center">
+                        <div style="padding: 0px;" class="panel panel-body c">
+                            <a class="panel-body c" href="/play/{{ vol._id }}" style="text-decoration: none">
+                                Reproducir: {{ vol.name }}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        
+    </table>
+</div>

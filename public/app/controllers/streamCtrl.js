@@ -16,16 +16,59 @@ angular.module('streamControllers', ['streamServices'])
     // SEARCH A LIST OF AVAILABLE VIDEOS
     this.searchFor = function(searchData) {
         //console.log('Ctrl buscar: ' + searchData.vidName);
-        Stream.find(searchData.vidName).then(function(videosList) {
-            if(videosList.data.length > 0) {
-                videosList.data.forEach(function(element) {
-                    console.log(element);
+        Stream.find(searchData.vidName).then(function(data) {
+            //TODO: solve getimage when app.cover is not assigned yet. So server does not response a bad request answer.
+            if(data.data) {
+                //data.data[0].videos.forEach(function(element) { console.log(element); });
+                app.isMultimedia = true;
+                app.Multimedia = [];
+                data.data.forEach(function(multimedia){
+                    if(multimedia.season === false) { // PELICULA
+                        multimedia.videos.forEach(function(vid){
+                            app.Multimedia.push({
+                                title: vid.name,
+                                cover: vid.cover,
+                                busquedas: vid.busquedas,
+                                videos: [{ _id: vid._id, name: vid.name }]
+                            });
+                        });
+                    } else { // SERIE
+                        app.Multimedia.push(multimedia);
+                    }
                 });
-                app.isLista = true;
-                app.lista = videosList.data;
             } else {
-                console.log('StreamCtrl: No hay lista');
-                app.isLista = false;
+                console.log('StreamCtrl: No hay Multimedia');
+                app.isMultimedia = false;
+            }
+        });
+    };
+
+    // SEARCH FOR CERTAIN MULTIMEDIA
+    this.searchMultimedia = function() {
+        
+        var mulName = $location.search().search;
+
+        Stream.find(mulName).then(function(data) {
+             if(data.data) {
+                app.isMultimedia = true;
+                app.Multimedia = [];
+                data.data.forEach(function(multimedia){
+                    if(multimedia.season === false) { // PELICULA
+                        multimedia.videos.forEach(function(vid){
+                            app.Multimedia.push({
+                                title: vid.name,
+                                cover: vid.cover,
+                                busquedas: vid.busquedas,
+                                videos: [{ _id: vid._id, name: vid.name }]
+                            });
+                        });
+                    } else { // SERIE
+                        app.Multimedia.push(multimedia);
+                    }
+                });
+            } else {
+                console.log('StreamCtrl: No hay Multimedia');
+                app.isMultimedia = false;
             }
         });
     };
@@ -34,8 +77,9 @@ angular.module('streamControllers', ['streamServices'])
     this.getParam = function(){
         var href = location.href;
         var id = href.match(/([^\/]*)\/*$/)[1];
-        console.log(id);
-        return 'http://192.168.0.11:8080/api/stream?search=' + id;
+        //console.log(id);  http://192.168.0.102:8080
+        return '/api/stream?search=' + id;
     };
+
 
 });

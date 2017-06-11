@@ -7,16 +7,20 @@ angular.module('mainController', ['authServices'])
     // FOR EACH PAGE -------------------------------------------
     $rootScope.$on('$routeChangeStart', function() {
         if (Auth.isLoggedIn()) {
-            //console.log('Success: User is logged in.');
             Auth.getUser().then(function(data) {
-                console.log(data.data.username);
                 app.username = data.data.username;
                 app.useremail = data.data.email;
+                if(data.data.tipo) {
+                    app.tipo = data.data.tipo;
+                    app.root = true;
+                } else {
+                    app.tipo = 'Regular';
+                    app.root = false;
+                }
                 app.isLoggedIn = true;
                 app.loadme = true;
             });
         } else {
-            //console.log('Failure: user is not logged in.');
             app.isLoggedIn = false;
             app.username = '';
             app.loadme = true;
@@ -44,7 +48,7 @@ angular.module('mainController', ['authServices'])
                 app.successMsg = data.data.message + '...Redirecting';
                 // Redirect to Home Page
                 $timeout(function() {
-                    $location.path('/about');
+                    $location.path('/profile');
                     app.loginData = '';
                     app.successMsg = data.data.message;
                 }, 2000);
