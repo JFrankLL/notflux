@@ -10,7 +10,7 @@
             <h2>Titulo del video</h2>
             <!-- VIDEO (STREAM) -->
             <div align="center" class="embed-responsive embed-responsive-16by9">
-                <video class="embed-responsive-item" autoplay controls controlslist="nodownload">
+                <video class="embed-responsive-item"  controls controlslist="nodownload">
                     <source ng-src="{{'/api/stream?search=' + stream.getParam();}}" id="player" type="video/mp4">
                 </video>
             </div>
@@ -25,9 +25,9 @@
         </div>
         <!-- COMENTAR -->
         <div class="jumbotron mod">
-            <p class="insetType" style="color: gray" >Dejar comentario</p> 
+            <p  style="color: gray" >Dejar comentario</p> 
             <div>
-                <form name="commentForma" ng-submit="stream.comentar({ user: main.username, content: contenido, video: stream.getParam() });">
+                <form name="commentForma" ng-submit="stream.comentar({ user: main.username, content: contenido, video: stream.getParam() }, main.username);">
                     <input style="background-color:#080808;color: white;" class="form-control"
                     type="text" name="commentValue" placeholder="Comentario" ng-model="contenido"
                     autocomplete="off" required>
@@ -38,16 +38,25 @@
                     <button class="btn panel-body c" type="submit">Comentar</button>
                 </form>
             </div>
-        </div>
-        <!-- COMENTARIOS -->
-        <div id="panelComments" class="jumbotron mod" ng-init="stream.getComments( stream.getParam() )">
-            <h2>Comentarios</h2>
-            <table ng-repeat="comentario in stream.comentarios" style="width: 100%; border-bottom: solid 2px black;">
-                <tr >
-                    <td style="margin: 0px;" width="10%"><p style="color:darkseagreen">{{ comentario.user + ' : '}}</p></td>
-                    <td style="margin: 0px;"><p style="color: whitesmoke">{{ comentario.content }}</p> </td>
-                </tr>
-            </table>
+
+            <!-- COMENTARIOS -->
+            <div id="panelComments" class="jumbotron mod" ng-init="stream.getComments( stream.getParam(), main.username )">
+                <h2>Comentarios</h2>
+                <table ng-repeat="comentario in stream.comentarios" style="width: 100%; border-bottom: solid 2px black;">
+                    <tr >
+                        <td width="10%"><p style="color:darkseagreen">{{comentario.user}}</p></td>
+                        <td width="75%"><p style="color: whitesmoke">{{comentario.content}}</p></td>
+                        <td ng-show="!comentario.activado" width="5%">
+                            <span ng-click="stream.like({ cmtId:comentario._id, video: comentario.video, username: main.username })" class="glyphicon glyphicon-thumbs-up"></span>
+                            </td> 
+                        <td ng-show="comentario.activado" width="5%">
+                            <span style="color:greenyellow;" ng-click="stream.like({ cmtId:comentario._id, video: comentario.video, username: main.username })" class="glyphicon glyphicon-thumbs-up"></span>
+                        </td>
+                        <td width="5%"><p style="color: olivedrab; font-size: 85%;">+{{comentario.upvotes.length}}</p></td>                      
+                    </tr>
+                </table>
+            </div>
+
         </div>
     </body>
 </html>

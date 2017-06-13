@@ -1,4 +1,4 @@
-angular.module('streamControllers', ['streamServices'])
+angular.module('streamControllers', ['streamServices', 'mainController'])
 
 .controller('streamCtrl', function(Stream, $location) {
     var app = this;
@@ -72,19 +72,37 @@ angular.module('streamControllers', ['streamServices'])
         });
     };
     // GET COMMENTS
-    this.getComments = function(videoId){
+    this.getComments = function(videoId, user){
         Stream.getComments(videoId).then(function(data) {
-            console.log(data);
-            app.comentarios = data.data;
+            //console.log('desde getComments() en strmCtrl ', data);
+            if(!data.data.success) {
+                app.comentarios = null;
+            } else {
+                app.comentarios = data.data.comentarios;// iterar comentarios
+                app.comentarios.forEach(function(com) {
+                    // iterar likes
+                    com.upvotes.forEach(function(upvote) {
+                        if( upvote == user) {
+                            com.activado = true;
+                        }
+                    });
+                });//*/
+            }
         });
     };
     // COMMENT
-    this.comentar = function(comentario) {
-
+    this.comentar = function(comentario, user) {
         Stream.comentar(comentario).then(function(data) {
-            app.getComments(comentario.video);
+            app.getComments(comentario.video, user);
         });
     };
+    // LIKE A COMMENT
+    this.like = function(obj) {
+        Stream.like(obj).then(function(data) {
+            app.getComments(obj.video, obj.username);
+        });
+    };
+
     // GET URL
     this.getParam = function(){
         var href = location.href;

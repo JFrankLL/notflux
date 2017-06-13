@@ -1,6 +1,7 @@
 var User        = require('../models/user.js');
 var Video       = require('../models/video.js');
 var Multimedia  = require('../models/multimedia.js');
+var Comentario  = require('../models/comentario.js');
 var jwt         = require('jsonwebtoken');
 var secret      = 'harrypotter';
 var fs          = require('fs');
@@ -85,7 +86,7 @@ module.exports = function(router) {
         }
 
         // value SEARCH IN MONGO FOR THAT VIDEO
-        console.log('buscando: '+value);
+        //console.log('buscando: '+value);
         Video.findOne({ _id: ObjectId(value) }).select('path').exec(function (err, video) {
             if(err){ 
                 return res.json({ success: false, message: err });
@@ -93,7 +94,6 @@ module.exports = function(router) {
                 if(video) {
                     // Stream
                     path = video.path;
-                    console.log(path);
                     if(typeof path != "undefined") {
                         // Vistas ++
                         Video.update(
@@ -101,7 +101,8 @@ module.exports = function(router) {
                             { $inc: { vistas: 1 } },
                             {},
                             function(error){
-                                console.log(error);
+                                if(error)
+                                    console.log('errorl: ', error);
                             }
                         );
                         // Stremear
@@ -248,16 +249,98 @@ module.exports = function(router) {
 
         res.sendStatus(200);
     });
-    // INSERT A NEW MULTIMEDIA (SHOW)
-    // http:localhost:8080/api/nuevaSerie
+    // LIKE A COMMENT
+    // http://localhost:8080/api/like?video=&username=&cmtId=
+    router.get('/like', function(req, res) {
+        var video = req.query.video;
+        var user = req.query.username;
+        var cmtId = req.query.cmtId;
+
+        // ids invalidos
+        if(video.length != 24 || cmtId.length != 24){
+            return res.status(404).send('Comment not found | invalid id\'s');
+        }
+
+        //
+        Multimedia.findOne({ 'comentarios._id': ObjectId(cmtId) }).exec(function(err, doc) {
+            doc.comentarios.forEach(function(com) {
+                if(com._id.equals(ObjectId(cmtId))) {
+                    if(com.upvotes.length > 0) {
+                        com.upvotes.forEach(function(up) {
+                            if(up == user) {
+                                //console.log('Ya estoy', com.content);
+                                com.upvotes = com.upvotes.filter(function(el){ return el !== user; });
+                                Multimedia.update(
+                                    { 'comentarios._id': ObjectId(cmtId) },
+                                    { $set: { 'comentarios.$.upvotes': com.upvotes }},
+                                    {}, function(err) {
+                                        if(err) 
+                                            console.log('error ', err);
+                                    }
+                                );
+                            } else {
+                                //console.log('No estoy', com.content);
+                                Multimedia.update(
+                                    { 'comentarios._id': ObjectId(cmtId) },
+                                    { $push: { 'comentarios.$.upvotes': user }},
+                                    {}, function(err) {
+                                        if(err) 
+                                            console.log('error ', err);
+                                    }
+                                );
+                            }
+                        });
+                    } else {
+                        //console.log('dar like');
+                        Multimedia.update(
+                            { 'comentarios._id': ObjectId(cmtId) },
+                            { $push: { 'comentarios.$.upvotes': user }},
+                            {}, function(err) {
+                                        if(err) 
+                                            console.log('error ', err);
+                            }
+                        );
+                    }
+                    return;
+                }
+            });
+        });
+        res.sendStatus(200);//*/
+
+        /*
+        Multimedia.update(
+            { 'comentarios._id': ObjectId(cmtId) },
+            { $push: { 'comentarios.$.upvotes': user }},
+            {}, function(err) {
+                if(err) res.sendStatus(500);
+                else res.sendStatus(200);
+            }
+        );
+        */
+
+        /*
+        db.multimedias.update({ _id: ObjectId(''), 'comentarios._id': ObjectId('') }, { $push: {'comentarios.$.upvotes': 'user_n'}})
+        //Mongo
+        db.multimedias.update({'comentarios._id':ObjectId(''), 'videos._id':ObjectId('')},
+        {$push:{'comentarios.$.upvotes':'item5'}})
+        */    
+    });
+    // INSERT A NEW COMMENT
+    // http:localhost:8080/api/comentar
     router.post('/comentar', function(req, res) {
         var comentario = req.body;
         var id = comentario.video;
-        comentario.date = Date.now();
         
+        var insertar = new Comentario();
+        insertar.date = Date.now();
+        insertar.upvotes = [];
+        insertar.content = comentario.content;
+        insertar.user = comentario.user;
+        insertar.video = comentario.video;
+
         Multimedia.update(
             { 'videos._id':ObjectId(id) },
-            { $push: { comentarios: comentario } },
+            { $push: { comentarios: insertar } },
             {}, function(err) {
                 if(err)
                     res.sendStatus(500);
@@ -265,29 +348,48 @@ module.exports = function(router) {
         );
         res.sendStatus(200);
     });
-    // INSERT A NEW MULTIMEDIA (SHOW)
-    // http:localhost:8080/api/getComentarios?videoId=
-    router.get('/getComentarios/:videoId?', function(req, res) {
+    // GET VIDEO COMMENTS
+    // http:localhost:8080/api/getComentarios?videoId=&opc=
+    router.get('/getComentarios', function(req, res) {
         var value;
         if(!req.query.videoId)
             return res.json({ success: false, message: 'videoId value not given.' });
         else
             value = req.query.videoId;
-        
-        Multimedia.findOne({ 'videos._id': ObjectId(value) }).exec(function(err, doc) {
+            
+        var ord_opc = req.query.opc;
+
+        Multimedia.findOne({ 'comentarios.video': value }).exec(function(err, doc) {
             if(!err){
-                if(doc)
-                    return res.send(doc.comentarios);
-                else
-                    return res.json({ success: false, msg:'null doc found'});
+                if(doc) {
+                    doc.comentarios = doc.comentarios.filter(function(el){ return el.video === value; });
+                    var result = {};
+                    if(ord_opc == 'd0') { 
+                        // Comments by: DATE DESC [opc=d0]
+                        result.comentarios = doc.comentarios.sort(function(a,b) { return new Date(b.date) - new Date(a.date);});
+                    } else if(ord_opc == 'l0') { 
+                        // Comments by: LIKES DESC [opc=l0]
+                        result.comentarios = doc.comentarios.sort(function(a,b) { return b.upvotes.length - a.upvotes.length;});
+                    } else if(ord_opc == 'l1') { 
+                        // Comments by: LIKES ASC [opc=l1]
+                        result.comentarios = doc.comentarios.sort(function(a,b) { return a.upvotes.length - b.upvotes.length;});
+                    } else { 
+                        // Comments by: DATE ASC [opc=d1] default
+                        result.comentarios = doc.comentarios;
+                    }
+                    result.success = true;
+                    return res.send(result);
+                } else {
+                    return res.json({ success: false, msg:'Sin comentarios'});
+                }
             }
             return res.json({ success: false, message: err });
         });
         
         
     });
-    // INSERT A NEW MULTIMEDIA (SHOW)
-    // http:localhost:808/api/nuevaSerie
+    // ADD A NEW MULTIMEDIA (SHOW)
+    // http:localhost:8080/api/nuevaSerie
     router.post('/nuevaSerie', function(req, res) {
         var serie = req.body;
         serie.videos = [];
@@ -368,7 +470,7 @@ var streamear = function(req, res, path) {
         var chunksize = (end-start)+1;
         //console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
         var porc = 100*start/end;
-        console.log('Progress: ' + porc.toFixed(2) + '%');
+        //console.log('Progress: ' + porc.toFixed(2) + '%');
 
         var file = fs.createReadStream(path, {start: start, end: end});
         res.writeHead(206, { 
@@ -380,7 +482,7 @@ var streamear = function(req, res, path) {
         });
         file.pipe(res);
     } else {
-        console.log('ALL: ' + total/1000/1000 + ' MB');
+        //console.log('ALL: ' + total/1000/1000 + ' MB');
         res.writeHead(200, { 
             'Content-Length': total,
             'Content-Type': 'video/mp4',

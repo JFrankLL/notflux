@@ -11,7 +11,7 @@ var path        = require('path');
 var passport    = require('passport');// parafacebook login
 var social      = require('./app/passport/passport')(app, passport);// facebook
 
-app.use(morgan('dev')); // log every request into the server 
+//app.use(morgan('dev')); // log every request into the server 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -41,27 +41,24 @@ app.listen(port, function() {
 
 /*/ TODO: Lista de tareas por hacer... tengo hueva. LAs hago luego (Si, aja!)
 
+    !!!URGE!!!
+    TODO: reparar likes (que sean por video y no por serie)
+    TODO: like que sea para el iesimo comentario no nomas para el cmnt mas antiguo
+    -------------------------------------------
+    TODO: cmnts por criterio { limit, skip (paginado) }
+    TODO: delete cmnts **talvez
+
     TODO: Top 10 busquedas, top10 vistas, top10 mis huevos
     ...
-    TODO: manejo de cuenta
-    TODO: manejo de cuenta (desde admin)
+    TODO: [ahi va maso] manejo de cuenta
     TODO: ver series vistas por usuarios
     ...
-    TODO: fechas
-    ...
-    TODO: Borrar.. cosas, no se
-    TODO: Agregar videos
-    ...
-    TODO: puntuar 
-    TODO: mejor puntuadas
+    TODO: (parecido a likes) puntuar 
+    TODO: (Ordenado nadamas) mejor puntuadas
     ...
     TODO: recomendar (amigos?)
-    TODO: comentarios
     ...
 
     TODO: REPORTES
-
-    TODO: /// AUDIO PTM! ///
-    TODO: ///--------------------------------------------------------------///
 
 */ 
