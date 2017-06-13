@@ -1,33 +1,35 @@
 <!Doctype HTML>
-
-        <br>
-        <br>
-        <div data-ng-init="stream.searchMultimedia();">
-
-            <table ng-repeat="val in stream.Multimedia" class="table table-borderless">
-                <!-- COVER ART COLUMN -->
-                <td align="center" width="40%">
-                    <img src="/api/getImg?img_name={{ val.cover }}" class="img-responsive" />
-                </td>
-                <!-- EPISODES LIST COLUMN -->
-                <td>
+<br>
+<br>
+<div data-ng-init="stream.searchMultimedia();">
+    <table ng-repeat="val in stream.Multimedia" class="table table-borderless">
+        <!-- TITLE -->    
+        <tr>
+            <td><h2>{{val.title + ' ' + val.season}}</h2></td>
+        </tr>
+        <!-- INFO -->
+        <tr>
+            <!-- COVER ART COLUMN -->
+            <td align="center" width="40%">
+                <img src="/api/getImg?img_name={{ val.cover }}" class="img-responsive" />
+            </td>
+            <!-- DESCRIPTION -->
+            <td>
                 <p style="color: white;">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra 
                     varius quam sit amet vulputate. Quisque mauris augue, molestie tincidunt 
                     condimentum vitae, gravida a libero. Aenean sit amet felis dolor, in sagittis
-                        nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor
-                        accumsan. Aliquam in felis sit amet augue. 
+                    nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor
+                    accumsan. Aliquam in felis sit amet augue. 
                 </p>
-                </td>
-            </table>
-
-            <br>
-            <br>
-            <div class="jumbotron mod">
-                <h2>Episodios</h2>
-                <table width="100%" class="table-borderless">
-                    <!-- EPISODE i -->
-                    <tr ng-repeat="vol in stream.Multimedia[0].videos">
+            </td>
+        </tr>
+        <!-- EPISODES -->
+        <tr>
+            <td></td>
+            <td>
+                <table width="100%">
+                    <tr ng-repeat="vol in val.videos">
                         <td style="padding: 0px;" align="center">
                             <div style="padding: 0px;" class="panel panel-body c">
                                 <a href="/play/{{ vol._id }}" style="text-decoration: none">
@@ -38,6 +40,29 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </td>
+        </tr>
+    </table>
 
+    <!-- EPISODES >
+    <tr>
+        <div class="jumbotron mod">
+            <h2>Episodios</h2>
+            <table width="100%" class="table-borderless">
+                <tr ng-repeat="vol in stream.Multimedia[0].videos">
+                    <td style="padding: 0px;" align="center">
+                        <div style="padding: 0px;" class="panel panel-body c">
+                            <a href="/play/{{ vol._id }}" style="text-decoration: none">
+                            <div item-width="100%" class="panel-body c">
+                                Reproducir: {{ vol.name }}
+                            </div></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
+    </tr-->
+    
+      
+
+</div>

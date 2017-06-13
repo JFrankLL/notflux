@@ -3,28 +3,52 @@
     <head>
         <title>Reproductor</title>
     </head>
-    <body>        
-        <div>
-            <div class="jumbotron mod">
-                <!-- TITULO -->
-                <h2>Titulo del video</h2>
-                <!-- VIDEO (STREAM) -->
-                <div align="center" class="embed-responsive embed-responsive-16by9">
-                    <video class="embed-responsive-item" autoplay controls controlslist="nodownload">
-                        <source ng-src="{{ stream.getParam(); }}" id="player" type="video/mp4">
-                    </video>
-                </div>
-                <!-- CALIFICAR -->
-                <div class="ec-stars-wrapper">
-                    <a href="#" data-value="1" title="Votar con 1 estrellas">&#9733;</a>
-                    <a href="#" data-value="2" title="Votar con 2 estrellas">&#9733;</a>
-                    <a href="#" data-value="3" title="Votar con 3 estrellas">&#9733;</a>
-                    <a href="#" data-value="4" title="Votar con 4 estrellas">&#9733;</a>
-                    <a href="#" data-value="5" title="Votar con 5 estrellas">&#9733;</a>
-                </div>
+    <body> 
+        <!-- VIDEO -->
+        <div class="jumbotron mod">
+            <!-- TITULO -->
+            <h2>Titulo del video</h2>
+            <!-- VIDEO (STREAM) -->
+            <div align="center" class="embed-responsive embed-responsive-16by9">
+                <video class="embed-responsive-item" autoplay controls controlslist="nodownload">
+                    <source ng-src="{{'/api/stream?search=' + stream.getParam();}}" id="player" type="video/mp4">
+                </video>
+            </div>
+            <!-- CALIFICAR -->
+            <div class="ec-stars-wrapper">
+                <a href="#" data-value="1" title="Votar con 1 estrellas">&#9733;</a>
+                <a href="#" data-value="2" title="Votar con 2 estrellas">&#9733;</a>
+                <a href="#" data-value="3" title="Votar con 3 estrellas">&#9733;</a>
+                <a href="#" data-value="4" title="Votar con 4 estrellas">&#9733;</a>
+                <a href="#" data-value="5" title="Votar con 5 estrellas">&#9733;</a>
             </div>
         </div>
-
+        <!-- COMENTAR -->
+        <div class="jumbotron mod">
+            <p class="insetType" style="color: gray" >Dejar comentario</p> 
+            <div>
+                <form name="commentForma" ng-submit="stream.comentar({ user: main.username, content: contenido, video: stream.getParam() });">
+                    <input style="background-color:#080808;color: white;" class="form-control"
+                    type="text" name="commentValue" placeholder="Comentario" ng-model="contenido"
+                    autocomplete="off" required>
+                    <!--textarea ng-model="commentValue" style="background-color:#080808;color: white;" class="form-control" 
+                    name="commentValue" placeholder="Contenido" id="comment" required>
+                    </textarea--> 
+                    <br>
+                    <button class="btn panel-body c" type="submit">Comentar</button>
+                </form>
+            </div>
+        </div>
+        <!-- COMENTARIOS -->
+        <div id="panelComments" class="jumbotron mod" ng-init="stream.getComments( stream.getParam() )">
+            <h2>Comentarios</h2>
+            <table ng-repeat="comentario in stream.comentarios" style="width: 100%; border-bottom: solid 2px black;">
+                <tr >
+                    <td style="margin: 0px;" width="10%"><p style="color:darkseagreen">{{ comentario.user + ' : '}}</p></td>
+                    <td style="margin: 0px;"><p style="color: whitesmoke">{{ comentario.content }}</p> </td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>
 

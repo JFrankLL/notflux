@@ -53,12 +53,14 @@ var app = angular.module('appRoutes', ['ngRoute'])
         controllerAs: 'stream',
         authenticated: true
     })
+    // PLAY
     .when('/play/:id', {
         templateUrl: 'app/views/pages/stream/play.html',
         controller: 'streamCtrl',
         controllerAs: 'stream',
         authenticated: true
     })
+    // SERIE
     .when('/multimedia/:serie?', {
         templateUrl: 'app/views/pages/stream/multimedia.html',
         controller: 'streamCtrl',

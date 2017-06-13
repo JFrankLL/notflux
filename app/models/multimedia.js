@@ -8,7 +8,8 @@ var MultimediaShema = new Schema({
     cover: { type: String },
     videos: [],
     busquedas: { type: Number },
-    vistas: { type: Number }
+    vistas: { type: Number },
+    comentarios: []
 });
 
 MultimediaShema.statics.toggleBlock = function (id, callback) {

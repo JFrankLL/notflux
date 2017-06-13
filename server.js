@@ -41,6 +41,8 @@ app.listen(port, function() {
 
 /*/ TODO: Lista de tareas por hacer... tengo hueva. LAs hago luego (Si, aja!)
 
+    TODO: Top 10 busquedas, top10 vistas, top10 mis huevos
+    ...
     TODO: manejo de cuenta
     TODO: manejo de cuenta (desde admin)
     TODO: ver series vistas por usuarios
@@ -48,7 +50,6 @@ app.listen(port, function() {
     TODO: fechas
     ...
     TODO: Borrar.. cosas, no se
-    TODO: Desabilitar video, esta ahi, mas no se puede ver
     TODO: Agregar videos
     ...
     TODO: puntuar 

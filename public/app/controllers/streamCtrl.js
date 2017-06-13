@@ -12,7 +12,6 @@ angular.module('streamControllers', ['streamServices'])
         });//*/
 
     };
-
     // SEARCH A LIST OF AVAILABLE VIDEOS
     this.searchFor = function(searchData) {
         //console.log('Ctrl buscar: ' + searchData.vidName);
@@ -42,7 +41,6 @@ angular.module('streamControllers', ['streamServices'])
             }
         });
     };
-
     // SEARCH FOR CERTAIN MULTIMEDIA
     this.searchMultimedia = function() {
         
@@ -66,19 +64,33 @@ angular.module('streamControllers', ['streamServices'])
                         app.Multimedia.push(multimedia);
                     }
                 });
+                console.log( app.Multimedia)
             } else {
                 console.log('StreamCtrl: No hay Multimedia');
                 app.isMultimedia = false;
             }
         });
     };
+    // GET COMMENTS
+    this.getComments = function(videoId){
+        Stream.getComments(videoId).then(function(data) {
+            console.log(data);
+            app.comentarios = data.data;
+        });
+    };
+    // COMMENT
+    this.comentar = function(comentario) {
 
+        Stream.comentar(comentario).then(function(data) {
+            app.getComments(comentario.video);
+        });
+    };
     // GET URL
     this.getParam = function(){
         var href = location.href;
         var id = href.match(/([^\/]*)\/*$/)[1];
         //console.log(id);  http://192.168.0.102:8080
-        return '/api/stream?search=' + id;
+        return id;
     };
 
 

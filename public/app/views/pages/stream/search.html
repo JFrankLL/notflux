@@ -16,44 +16,45 @@
 <br>
 <!-- Lista -->
 <div class="list-group" ng-show="stream.isMultimedia">
-    <strong>Videos disponibles</strong>
-    <table ng-repeat="val in stream.Multimedia" class="table table-borderless">
-        <td width="40%">
-            <table>
-                <!-- COVER ART COLUMN -->
-                <tr>
-                    <td align="center" width="40%">
-                        <a href="/multimedia?search={{ val.title }}">
-                            <img src="/api/getImg?img_name={{ val.cover }}" class="img-responsive" />
-                        </a>
-                    </td>
-                </tr>
-                <!-- Description -->
-                <tr>
-                    <td class="insetType" style="color: whitesmoke">
-                        <h2>Busquedas</h2>
-                        <h1 style="color: darkolivegreen">{{ val.busquedas }}</h1>
-                        <h2>Calificacion</h2>
-                        <h1 style="color: goldenrod;"> &#9733 &#9733 &#9733 &#9733 &#9733</h1>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <!-- EPISODES LIST COLUMN -->
-        <td>
-            <table width="100%" class="table-borderless">
-                <!-- EPISODE i -->
-                <tr ng-repeat="vol in val.videos">
-                    <td style="padding: 0px;" align="center">
-                        <div style="padding: 0px;" class="panel panel-body c">
-                            <a class="panel-body c" href="/play/{{ vol._id }}" style="text-decoration: none">
-                                Reproducir: {{ vol.name }}
+    <table style="margin-bottom: 64px;" width="100%" ng-repeat="val in stream.Multimedia">
+        <caption class="insetType panel-body c" style="color: whitesmoke; text-align: center; border-top: solid 1px gray; padding-top: 10px;"><h2>{{ val.title }}</h2></caption>
+        <tr>
+            <td width="40%" style="vertical-align: top;">
+                <table>
+                    <!-- COVER ART COLUMN -->
+                    <tr>
+                        <td align="center" width="40%">
+                            <a href="/multimedia?search={{ val.title }}">
+                                <img src="/api/getImg?img_name={{ val.cover }}" class="img-responsive" />
                             </a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        
+                        </td>
+                    </tr>
+                    <!-- Description -->
+                    <tr>
+                        <td style="text-align: center;">
+                            <h2>Busquedas</h2>
+                            <h1 style="color: darkolivegreen">{{ val.busquedas }}</h1>
+                            <h2>Calificacion</h2>
+                            <h1 style="color: goldenrod;"> &#9733 &#9733 &#9733 &#9733 </h1>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <!-- EPISODES LIST COLUMN -->
+            <td style="vertical-align: top;">
+                <table width="100%" class="table-borderless">
+                    <!-- EPISODE i -->
+                    <tr ng-repeat="vol in val.videos">
+                        <td style="padding: 0px;" align="center">
+                            <div class="panel panel-body c">
+                                <a class="panel-body c" href="/play/{{ vol._id }}" style="padding: 0px;text-decoration: none">
+                                    <div style="padding: 0px;" class="panel-body c">Reproducir: {{ vol.name }}</div>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </table>
 </div>

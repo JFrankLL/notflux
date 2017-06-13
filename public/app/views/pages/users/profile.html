@@ -6,33 +6,61 @@
 <div class="panel panel-info">
     <!-- Default panel contents -->
     <div class="panel-heading" style="text-align: center;"><strong>Perfil</strong></div>
-    
     <!-- Table -->
     <table class="table">
         <tr>
+            <td><strong>Nombre</strong></td>
             <td><strong>Username</strong></td>
             <td><strong>E-mail</strong></td>
             <td><strong>Password</strong></td>
             <td><strong>Tipo</strong></td>
         </tr>
         <tr>
+            <td>{{ main.name }}</td>
             <td>{{ main.username }}</td>
             <td>{{ main.useremail }}</td>
             <td>********************</td>
             <td>{{ main.tipo }}</td>
         </tr>
     </table>
-
 </div>
+
+<div class="jumbotron mod">
+    <form>
+        <form name="cambiarForma" ng-submit="profile.cambio(cambio)" >
+            <strong style="color: white">Nuevo nombre:</strong>
+            <input name="name" placeholder="Nombre" ng-model="cambio.name" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off">    
+            <br>
+            <strong style="color: white">Nuevo E-mail:</strong>
+            <input name="email" placeholder="Email" ng-model="cambio.email" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off">    
+            <br>
+            <strong style="color: white">Nuevo Username:</strong>
+            <input name="username" placeholder="Username" ng-model="cambio.username" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off">    
+            <br>
+            <button class="btn panel-body c" type="submit">Aceptar cambios</button>
+        </form>
+    </form>
+</div>
+
 
 <div ng-show="main.root">
     <div class="jumbotron mod">
-        <h2>Acciones de Administrador</h2>
+        <h2 style="color:white">Acciones de Administrador</h2>
 
+        <!-- Menu -->
+        <div class="jumbotron mod">
+            <table class="table-borderless">
+                <tr><button style="width: 100%" class="btn panel-body c" ng-click="profile.menu(1);">Bloqueos</button></tr>
+                <tr><button style="width: 100%" class="btn panel-body c" ng-click="profile.menu(2);">Agregar Multimedia</button></tr>
+                <tr><button style="width: 100%" class="btn panel-body c" ng-click="profile.menu(3); profile.loadSeries();">Agregar Video</button></tr>
+                <tr><button style="width: 100%" class="btn panel-body c" ng-click="profile.menu(4);">Borrado</button></tr>
+                <tr><button style="width: 100%" class="btn panel-body c" ng-click="profile.menu(5);">Modificaciones</button></tr>
+            </table>
+        </div>
+        <hr>
         <!-- Buscar y bloquear videos -->
-        <div class="jumbotron mod2">
-            <label>Bloquear video (no borra)</label>
-            <br>
+        <div ng-show="profile.bloqueos" class="jumbotron mod2">
+            <strong style="color: white">Bloquear video (no borra)</strong>
             <form name="searchForma" ng-submit="profile.buscar( searchValue );">
                 <input style="background-color:#080808;color: white;" class="form-control"
                 type="text" name="searchValue" placeholder="buscar" ng-model="searchValue"
@@ -42,7 +70,7 @@
             </form>
             <br><br>
             <!-- Resultados -->
-            <table width="100%">
+            <table width="100%" ng-show="profile.lista.videos != false">
                 <th> <h1  style="color:white;">{{ profile.lista.title }}</h1> </th>
                 <tr item-width="100%">
                     <td style="padding: 0px;" item-width="100%">
@@ -72,7 +100,45 @@
                 </tr>
             </table>
         </div>
-
+        <!-- Nueva Serie title season cover videos busquedas vistas-->
+        <div ng-show="profile.masSeries" class="jumbotron mod2">
+            <h2>Agregar Nueva Serie</h2>
+            <form name="agregaSForma" ng-submit="profile.nuevaSerie(nSer)" >
+                <strong style="color: white">Titulo de la Serie:</strong>
+                <input name="title" placeholder="Nombre" ng-model="nSer.title" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off" required>    
+                <br><strong style="color: white">Temporada:</strong>
+                <input name="season" placeholder="Temporada" ng-model="nSer.season" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off" required>    
+                <br><strong style="color: white">Portada:</strong>
+                <input name="cover" placeholder="Ruta portada" ng-model="nSer.cover" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off" required>       
+                <br><button class="btn panel-body c" type="submit">Insertar</button>
+            </form>
+        </div>
+        <!-- Nuevo Video -->
+        <div ng-show="profile.masVideos" class="jumbotron mod2">
+            <h2>Agregar Nuevo Video</h2>
+            <form name="agregaForma" ng-submit="profile.nuevoVideo(nVid)">
+                <strong style="color: white">Nombre del video:</strong>
+                <input name="nombre" placeholder="Nombre" ng-model="nVid.name" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off" required>    
+                <br><strong style="color: white">Ruta del video:</strong>
+                <input name="ruta" placeholder="Ruta del video" ng-model="nVid.path" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off" required>    
+                <br><strong style="color: white">Ruta Imagen del video:</strong>
+                <input name="cover" placeholder="Ruta de la imagen" ng-model="nVid.cover" style="background-color:#080808;color: white;" class="form-control" type="text" autocomplete="off" required>    
+                <br><strong style="color: white">Serie a la que pertenece:</strong>
+                <select required="required" ng-model="nVid.serie" class="form-control" 
+                    style="background-color:#080808;color: white;"
+                    ng-options="serie._id as serie.title + ' ' + serie.season for serie in profile.series">
+                </select>
+                <br><button class="btn panel-body c" type="submit">Insertar</button>
+            </form>
+        </div>
+        <!-- Borrados -->
+        <div ng-show="profile.borrados" class="jumbotron mod2">
+            borrados
+        </div>
+        <!-- Modificaciones -->
+        <div ng-show="profile.modificaciones" class="jumbotron mod2">
+            modificaciones
+        </div>
 
     </div>
 

@@ -221,6 +221,94 @@ module.exports = function(router) {
                 return res.json({ success: false, message: err });
         });
     });
+    // INSERT A NEW VIDEO
+    // http:localhost:8080/api/nuevoVideo
+    router.post('/nuevoVideo', function(req, res) {
+        var vid = req.body;
+        vid.vistas = 0;
+        vid.block = false;
+        var serie = vid.serie;
+        delete vid.serie;
+        Video.create(vid, function(err, doc) {
+            if(err) {
+                res.sendStatus(500);
+            } else {
+                Video.findOne({ 'name': { '$regex': vid.name, '$options': 'i' } }).exec(function(err, doc){
+                    Multimedia.update(
+                    { _id: ObjectId(serie) },
+                    { $push: { videos: { _id: ObjectId(doc._id), name: vid.name } } },
+                    {}, function(err){
+                        if(err)
+                            console.log('error aoi.js 237 ********************************************************************');
+                    });
+                });
+            }
+        });
+        
+
+        res.sendStatus(200);
+    });
+    // INSERT A NEW MULTIMEDIA (SHOW)
+    // http:localhost:8080/api/nuevaSerie
+    router.post('/comentar', function(req, res) {
+        var comentario = req.body;
+        var id = comentario.video;
+        comentario.date = Date.now();
+        
+        Multimedia.update(
+            { 'videos._id':ObjectId(id) },
+            { $push: { comentarios: comentario } },
+            {}, function(err) {
+                if(err)
+                    res.sendStatus(500);
+            }
+        );
+        res.sendStatus(200);
+    });
+    // INSERT A NEW MULTIMEDIA (SHOW)
+    // http:localhost:8080/api/getComentarios?videoId=
+    router.get('/getComentarios/:videoId?', function(req, res) {
+        var value;
+        if(!req.query.videoId)
+            return res.json({ success: false, message: 'videoId value not given.' });
+        else
+            value = req.query.videoId;
+        
+        Multimedia.findOne({ 'videos._id': ObjectId(value) }).exec(function(err, doc) {
+            if(!err){
+                if(doc)
+                    return res.send(doc.comentarios);
+                else
+                    return res.json({ success: false, msg:'null doc found'});
+            }
+            return res.json({ success: false, message: err });
+        });
+        
+        
+    });
+    // INSERT A NEW MULTIMEDIA (SHOW)
+    // http:localhost:808/api/nuevaSerie
+    router.post('/nuevaSerie', function(req, res) {
+        var serie = req.body;
+        serie.videos = [];
+        serie.busquedas = 0;
+        serie.vistas = 0;
+        Multimedia.create(serie, function(err, doc) {
+            if(err)
+                res.sendStatus(500);
+        });
+
+        res.sendStatus(200);
+    });
+    // GET MULTIMEDIA LIST
+    // http:localhost:8080/api/getSeries
+    router.get('/getSeries', function(req, res) {
+        Multimedia.find({}).select('_id title season').exec(function(err, docs) {
+            if(err)
+                res.json({ success: false });
+            res.send(docs);
+        });
+    });
     // BLOCK VIDEO BY id
     // http:localhost:8080/api/block?id=
     router.get('/block/:id?', function(req, res) {
